@@ -8,7 +8,6 @@ function App() {
         <a className="btn btn-ghost text-xl">Devtinder</a>
       </div>
       <div className="flex gap-2">
-       
         <div className="dropdown dropdown-end mx-4">
           <div
             tabIndex={0}
