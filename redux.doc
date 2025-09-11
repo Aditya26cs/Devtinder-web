@@ -1,0 +1,64 @@
+🔑 Core Concepts (Redux & Redux Toolkit)
+
+1. State 🗃️
+State = your app’s data at a given time.
+Example: In a shopping app → cart items, user login info, theme mode, etc.
+It’s like a database in memory for your React app.
+
+2. Action 📩
+Action = an object that tells what happened.
+Example: { type: "cart/addItem", payload: { id: 1, name: "Shoes" } }
+Has two parts:
+type: unique string (like label)
+payload: extra data needed to make the change
+Think: Action = “a message/letter” you send to Redux to update state.
+
+3. Reducer ⚙️
+Reducer = a function that decides how the state should change when it receives an action.
+It takes → old state + action → returns new state.
+Example:
+
+function cartReducer(state, action) {
+  if (action.type === "cart/addItem") {
+    return [...state, action.payload]; // add new item
+  }
+  return state; // unchanged
+}
+
+Think: Reducer = rules book (if action = X, update state like Y).
+
+4. Payload 🎁
+Payload = extra info sent with the action.
+Example: If the action is addItem, the payload might be { id: 1, name: "Shoes" }.
+Without payload → Redux wouldn’t know which item to add.
+
+5. Slice 🍰 (Redux Toolkit feature)
+In Redux Toolkit, we organize state into slices (like cutting a cake).
+Each slice = one feature/module of your app (cart slice, user slice, theme slice).
+
+A slice contains:
+The state (data)
+The reducers (functions to change it)
+The actions (auto-generated for you!)
+
+Example (a cart slice):
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const cartSlice = createSlice({
+  name: "cart", // unique name for slice
+  initialState: [], // cart starts empty
+  reducers: {
+    addItem: (state, action) => {
+      state.push(action.payload); // add item to cart
+    },
+    removeItem: (state, action) => {
+      return state.filter(item => item.id !== action.payload.id);
+    }
+  }
+});
+
+export const { addItem, removeItem } = cartSlice.actions; // actions auto-created
+export default cartSlice.reducer;
+
+
