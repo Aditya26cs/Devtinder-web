@@ -57,8 +57,50 @@ const cartSlice = createSlice({
     }
   }
 });
-
 export const { addItem, removeItem } = cartSlice.actions; // actions auto-created
 export default cartSlice.reducer;
+
+
+6. Store 🏦
+The central place where all slices live.
+
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./cartSlice";
+
+const store = configureStore({
+  reducer: {
+    cart: cartReducer,
+  },
+});
+
+export default store;
+
+
+ 
+// workflow 
+
+UI (React Component)
+     │
+     │  dispatch(userSlice.actions.addUser({id:1, name:"Aditya"}))
+     ▼
+Action Creator (addUser)
+     │
+     │  creates { type: "user/addUser", payload: {id:1, name:"Aditya"} }
+     ▼
+Redux Store (userSlice.reducer)
+     │
+     │  checks reducers object:
+     │    case "user/addUser" → run (state, action) => action.payload
+     ▼
+Case Reducer (addUser)
+     │
+     │  state = {id:1, name:"Aditya"}
+     ▼
+Updated Store State
+     │
+     │  React gets new state via useSelector()
+     ▼
+UI Updates (now shows "Aditya")
+
 
 

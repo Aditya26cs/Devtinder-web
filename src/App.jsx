@@ -1,8 +1,9 @@
 import { RouterProvider , createBrowserRouter} from "react-router-dom";
-import Body from "./Body";
+import  Body from "./components/Body";
 import Login from "./components/Login";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import Feed from "./components/Feed";
 
 function Home() {
   return <h1>Home</h1>;
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Body />,
     children : [
+      {
+        path : "/",
+        element : <Feed />
+      },
       {
         path : "/login",
         element : <Login />

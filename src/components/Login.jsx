@@ -1,24 +1,40 @@
-import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import base_url from "../utils/constants";
 
 const Login = () => {
 
  const[emailId,setEmailId] = useState("Akshat@gmail.com");
  const[password,setPassword] = useState("akshat123@");
- 
+
+ const dispatch = useDispatch();
+ const navigate = useNavigate();
+
 
  const handleLogin = async () => {
      
     try{
-        const res = await axios.post("http://localhost:3000/login", {
+        const res = await axios.post(base_url + "/login", {
         emailId,
         password,
       }, {withCredentials: true});
-
+       // console.log("Login successful:", res.data);
+       dispatch(addUser(res.data));
+       return navigate("/");
       // while sending request to server include withCredentials: true
       // This is important for cookie-based authentication
       // Make sure your server is configured to accept credentials
+
+       // dispatch(...) sends this action object to the Redux store.
+       // {
+       //   type: "user/addUser",   // tells Redux: "this belongs to userSlice → addUser reducer"
+       //   payload: res.data       // the data you passed
+       // }
+    
+      
      
     } catch (error) {
       console.error("Login failed:", error);
