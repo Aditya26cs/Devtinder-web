@@ -27,6 +27,14 @@ export default userSlice.reducer;
 // It combines all your individual reducer functions from the reducers object.
 // The store only needs one reducer per slice, and that’s what userSlice.reducer provides.
 
+
+ 
+// These are the parameters of the reducer function:  (state, action)
+
+// state → current state of this slice.
+// In your slice, initialState is null.
+// So initially, state = null.
+
 // action → object that Redux passes when you dispatch something.
 // {
 //  type: "user/addUser",  // automatically generated
