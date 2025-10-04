@@ -8,12 +8,14 @@ import base_url from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("Akshat@gmail.com");
   const [password, setPassword] = useState("akshat123@");
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
+
       const res = await axios.post(
         base_url + "/login",
         {
@@ -37,7 +39,7 @@ const Login = () => {
       //   payload: res.data       // the data you passed
       // }
     } catch (error) {
-      console.error("Login failed:", error);
+       setError("Invalid email or password");
     }
   };
 
@@ -64,6 +66,8 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </fieldset>
+
+       <p className="text-red-500">{error}</p>
 
         <div className="card-actions justify-center mt-2 ">
           <button className="btn btn-primary rounded-xl" onClick={handleLogin}>

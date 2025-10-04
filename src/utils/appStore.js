@@ -9,8 +9,7 @@ const store = configureStore({
       user: userReducer,
       // user is the name of the slice and userReducer is the reducer function(userSlice.reducer).
   }
-  // user is the name of the slice and userReducer  is the  reducer function(userSlice.reducer).
-  
+   
 });
 
 export default store;
