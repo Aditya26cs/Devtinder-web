@@ -5,9 +5,7 @@ import axios from 'axios';
 import base_url from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../utils/userSlice';
-import { useNavigate } from 'react-router-dom';
-import Connections from './Connections';
-import Requests from './Requests';      
+import { useNavigate } from 'react-router-dom';     
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
@@ -63,7 +61,10 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/connections">Connections</Link>
+              <Link to="/connections">Friends</Link>
+            </li>
+            <li>
+              <Link to="/requests">Requests</Link>
             </li>
             <li>
               <a onClick={handleLogout}>Logout</a>
