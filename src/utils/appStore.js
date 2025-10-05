@@ -3,12 +3,14 @@ import { configureStore } from '@reduxjs/toolkit'
 // it takes an object as an argument which contains the reducer object . reducer object contains multiple slice reducers.
 import userReducer from './userSlice';
 import feedReducer from './feedSlice';
+import connectionsReducer from './connectionsSlice';
 
 
 const store = configureStore({
   reducer:  {
       user: userReducer,
       feed: feedReducer,
+      connections: connectionsReducer,
       // user is the name of the slice and userReducer is the reducer function(userSlice.reducer).
   }
    

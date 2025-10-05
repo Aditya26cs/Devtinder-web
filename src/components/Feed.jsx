@@ -9,7 +9,8 @@ import Cards from "./Cards";
 const Feed = () => {
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
-  //       console.log(feed);
+
+  // console.log(feed?.users[0]);
   const getFeed = async () => {
     if (feed) return;
     try {
