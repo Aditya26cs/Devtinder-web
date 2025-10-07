@@ -5,10 +5,14 @@ import { useDispatch } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useSelector } from "react-redux";
 import Cards from "./Cards";
+import { useState } from "react";
 
 const Feed = () => {
+
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
+  
+  const [button , setButton] =  useState(true);
 
   // console.log(feed?.users[0]);
   const getFeed = async () => {
@@ -17,9 +21,10 @@ const Feed = () => {
       const res = await axios.get(base_url + "/feed", {
         withCredentials: true,
       });
+     //  console.log(res.data.users);
       dispatch(addFeed(res.data));
     } catch (err) {
-      console.log(err.message);
+      // console.log(err.message);
     }
   };
 
@@ -30,7 +35,7 @@ const Feed = () => {
   return (
     feed && (
       <div className="flex justify-center items-center h-screen">
-        <Cards user={feed.users[0]} />
+        <Cards user={feed.users[0]}  button={button} setButton={setButton}/>
       </div>
     )
   );

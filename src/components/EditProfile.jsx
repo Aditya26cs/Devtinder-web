@@ -15,6 +15,7 @@ const EditProfile = ({ user }) => {
   const [image, setImage] = useState(user?.image || "");
   const [error, setError] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
+  const [button , setButton] =  useState(false);
 
   const dispatch = useDispatch();
 
@@ -57,9 +58,10 @@ const EditProfile = ({ user }) => {
   return (
     <div
       className="card bg-base-300 w-[700px] shadow-sm  absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 
-    flex flex-col md:flex-row  border-2 border-gray-800 h-[650px]"
+    flex flex-col md:flex-row  border-2 border-gray-800 h-[700px]"
     >
-      <div className="card-body ">
+      <div className="card-body  ">
+
         <h2 className="card-title ml-26">Edit Profile</h2>
 
         <fieldset className="fieldset ">
@@ -132,12 +134,12 @@ const EditProfile = ({ user }) => {
             Save
           </button>
         </div>
+
       </div>
 
-      <div className="mt-[8%] mr-4 ">
-        <Cards
-          user={{ firstName, lastName, age, about, password, gender, image }}
-        />
+      <div className="mt-[6%] mr-3 h-3/4">
+
+        <Cards user={{ firstName, lastName, age, about, password, gender, image }} button={button} setButton={setButton} />
 
         {error && (
           <div className="text-red-500 text-center mt-2 border-2  border-gray-400 rounded-xl p-2">
@@ -152,7 +154,9 @@ const EditProfile = ({ user }) => {
           </div>
         </div>}
 
+
       </div>
+
     </div>
   );
 };

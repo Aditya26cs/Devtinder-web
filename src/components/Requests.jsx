@@ -34,7 +34,7 @@ const Requests = () => {
       dispatch(removeRequest(requestId));
       // console.log(res);
     } catch (error) {
-    
+        
     }
   };
 

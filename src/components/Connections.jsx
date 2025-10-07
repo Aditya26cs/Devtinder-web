@@ -7,7 +7,7 @@ import { addConnection } from "../utils/connectionsSlice";
 const Connections = () => {
   const dispatch = useDispatch();
   const connections = useSelector((state) => state.connections);
-  // console.log(connections);
+   console.log(connections);
   const fetchConnections = async () => {
     try {
       const res = await axios.get(base_url + "/user/connections", {
@@ -28,21 +28,22 @@ const Connections = () => {
   if (!connections) return;
 
   if (connections.length === 0) {
-    return <div>No Connections</div>;
+    return <div className="text-center mt-10 text-xl">No Connections</div>;
   }
 
   return (
     <div className="text-center mt-10 ">
-      <h1 className="text-2xl text-center text-bold">Connections</h1>
+
+      <h1 className="text-2xl text-center text-bold">Your Friends </h1>
+      
       {Array.isArray(connections) &&
-        connections.map((connection) => {
+        connections.filter((connection) => connection).map((connection) => {
           // console.log(connection);
           const { _id , firstName, lastName, age, gender, about, image } = connection;
+
           return (
-            <div
-              key={_id}
-              className="flex border p-8 mt-4 rounded-lg w-1/2 mx-auto shadow-lg bg-base-200"
-            >
+            <div key={_id} className="flex border p-8 mt-4 rounded-lg w-1/2 mx-auto shadow-lg bg-base-200">
+
               <div>
                 {image && (
                   <img
@@ -52,6 +53,7 @@ const Connections = () => {
                   />
                 )}
               </div>
+
               <div className="text-center ml-[30%]">
                 <h2 className="text-xl text-bold">
                   {firstName} {lastName}
@@ -60,6 +62,7 @@ const Connections = () => {
                 <p className="text-gray-600">{gender}</p>
                 <p className="text-gray-600">{about}</p>
               </div>
+
             </div>
           );
         })}
