@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Cards from "./Cards";
 import base_url from "../utils/constants";
 import axios from "axios";
@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const EditProfile = ({ user }) => {
+
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const [password, setPassword] = useState(user?.password || "");
@@ -18,6 +19,17 @@ const EditProfile = ({ user }) => {
   const [button , setButton] =  useState(false);
 
   const dispatch = useDispatch();
+
+   useEffect(() => {
+    if (!user) return;
+    setFirstName(user.firstName || "");
+    setLastName(user.lastName || "");
+    setPassword(user.password || "");
+    setAge(user.age ?? "");
+    setAbout(user.about || "");
+    setGender(user.gender || "");
+    setImage(user.image || "");
+  }, [user]);
 
   const saveProfile = async () => {
     try {
@@ -42,7 +54,7 @@ const EditProfile = ({ user }) => {
         withCredentials: true,
       });
 
-      // console.log(res);
+      // console.log(res.data);
       dispatch(addUser(res?.data?.data));
       setToastVisible(true);
       setError(""); // Clear error on success

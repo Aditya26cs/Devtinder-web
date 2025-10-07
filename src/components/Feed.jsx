@@ -4,24 +4,25 @@ import base_url from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useSelector } from "react-redux";
-import Cards from "./Cards";
+import Cards from "./Cards";    
 import { useState } from "react";
 
 const Feed = () => {
-
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
+  // console.log(feed);
+  const [button , setButton] = useState(true);
   
-  const [button , setButton] =  useState(true);
 
+ 
   // console.log(feed?.users[0]);
   const getFeed = async () => {
-    if (feed) return;
+    if (feed && feed.users && feed.users.length > 0) return;
     try {
       const res = await axios.get(base_url + "/feed", {
         withCredentials: true,
       });
-     //  console.log(res.data.users);
+      // console.log(res.data);
       dispatch(addFeed(res.data));
     } catch (err) {
       // console.log(err.message);
@@ -32,12 +33,16 @@ const Feed = () => {
     getFeed();
   }, []);
 
+  if (!feed || !feed.users) return <div>Loading...</div>;
+
+  const currentUser = feed.users[0];
+
+  if (!currentUser) return <div className="text-center mt-10">No more users in feed</div>;
+
   return (
-    feed && (
-      <div className="flex justify-center items-center h-screen">
-        <Cards user={feed.users[0]}  button={button} setButton={setButton}/>
-      </div>
-    )
+    <div className="flex justify-center items-center min-h-screen">
+       <Cards user={currentUser} button={true}/>
+    </div>
   );
 };
 

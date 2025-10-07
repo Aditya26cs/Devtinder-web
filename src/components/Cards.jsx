@@ -1,32 +1,35 @@
 import React from "react";
 import axios from "axios";
 import base_url from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
 
-const Cards = ({ user , button , setButton }) => {
 
+const Cards = ({ user , button}) => {
 
+  if (!user) return null
+  const {_id , firstName, lastName, age, gender, about, skills, image } = user;
+  const dispatch = useDispatch();
 
   const handleUserClick = async (status, userId) => {
     try {
-      const res = await axios.post(
-        base_url + "/request/send/" + status + "/" + userId,
-        {},
-        {
-          headers: {
-            withCredentials: true,
-          },
-        }
+       await axios.post(
+        base_url + "/request/send/" + status + "/" + userId, {}, { withCredentials: true}
       );
+
+
+      dispatch(removeUserFromFeed(userId));
     } catch (err) {}
   };
 
-  const { firstName, lastName, age, gender, about, skills, image } = user;
-  // console.log(user);
+ 
+
+  // console.log(user._id);
   return (
     <div className="card bg-base-200 w-96 shadow-sm border-2 border-gray-800 h-fit">
 
       <figure>
-        <img src={image} alt="Person Image" className="object-cover w-full h-96" />
+        <img src= {image && image.trim() !== "" ? image : undefined} alt="Person Image" className="object-cover w-full h-96" />
       </figure>
 
       <div className="card-body">
@@ -40,8 +43,8 @@ const Cards = ({ user , button , setButton }) => {
         {skills && <p>{skills}</p>}
 
          {button && <div className="card-actions justify-center my-4  ">
-          <button className="btn btn-primary ">Ignored</button>
-          <button className="btn btn-secondary ">Interested</button>
+          <button className="btn btn-primary" onClick={() => handleUserClick("ignored", _id)}>Ignored</button>
+          <button className="btn btn-secondary" onClick={() => handleUserClick("interested", _id)}>Interested</button>
          </div>}
 
       </div>

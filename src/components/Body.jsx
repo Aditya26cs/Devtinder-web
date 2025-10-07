@@ -25,12 +25,14 @@ const Body = () => {
         navigate("/login");
       }
       // console.log(err.message);
+      console.error("Failed to fetch profile:", err);
     }
   };
 
   useEffect(() => {
+    if (location.pathname === "/login") return;
     userData();
-  }, []);
+  }, [location.pathname, dispatch, navigate]);
 
   return (
     <>
