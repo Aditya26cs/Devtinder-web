@@ -32,6 +32,7 @@ const EditProfile = ({ user }) => {
   }, [user]);
 
   const saveProfile = async () => {
+
     try {
       // Build payload, removing empty strings and converting types
       const payload = {
@@ -61,8 +62,10 @@ const EditProfile = ({ user }) => {
       setTimeout(() => {
         setToastVisible(false);
       }, 3000);
-    } catch (err) {
-      console.log(err);
+    } 
+    
+    catch (err) {
+      // console.log(err);
       setError(err.response?.data || "Error updating profile");
     }
   };

@@ -51,7 +51,7 @@ const Login = () => {
        const res = await axios.post(
         base_url + "/signup", { firstName, lastName,  emailId,  password}, { withCredentials: true }
         );  
-        console.log("Signup successful:", res.data)
+       // console.log("Signup successful:", res.data)
          dispatch(addUser(res.data)); 
          return navigate("/profile")
       } catch(err) {
@@ -113,7 +113,9 @@ const Login = () => {
         </div>
 
          
-      <p className="m-auto mt-4  cursor-pointer" onClick={() => {setIsLoginForm((value) => !value)}}>{isLoginForm? "New User ? Signup Here" : "Existing User ? Login"}</p>
+      <p className="m-auto mt-4  cursor-pointer" onClick={() => {setIsLoginForm((value) => !value)}}>
+        {isLoginForm? "New User ? Signup Here" : "Existing User ? Login"}
+      </p>
 
 
       </div>
