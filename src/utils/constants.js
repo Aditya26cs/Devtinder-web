@@ -1,2 +1,2 @@
-const base_url =  "https://devtinder-4-w7tj.onrender.com";
+const base_url =  "https://devtinder-kappa.vercel.app";
 export default base_url;
