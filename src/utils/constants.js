@@ -1,2 +1,2 @@
-const base_url =  "https://devtinder-2-87y0.onrender.com";
+const base_url =  "http://localhost:3000";
 export default base_url;
