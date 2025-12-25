@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
 import Body from "./components/Body";
 import Login from "./components/Login";
 import Feed from "./components/Feed";
@@ -12,7 +12,7 @@ function Home() {
 }
 
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Body />,
