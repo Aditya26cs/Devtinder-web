@@ -28,10 +28,10 @@ const Body = () => {
     }
   };
 
-  useEffect(() => {
-    if (location.pathname === "/login") return;
-    userData();
-  }, [location.pathname, dispatch, navigate]);
+  // useEffect(() => {
+  //   if (location.pathname === "/login") return;
+  //   userData();
+  // }, [location.pathname, dispatch, navigate]);
 
   useEffect(() => {
     if (location.pathname === "/login") return;
