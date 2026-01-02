@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Body = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,12 +19,11 @@ const Body = () => {
       });
 
       dispatch(addUser(res.data));
-    } 
-    catch (err) {
-      if (err.status === 401) {
+    } catch (err) {
+      if (err.response?.status === 401) {
         navigate("/login");
+        return;
       }
-      // console.log(err.message);
       console.error("Failed to fetch profile:", err);
     }
   };
@@ -34,6 +32,17 @@ const Body = () => {
     if (location.pathname === "/login") return;
     userData();
   }, [location.pathname, dispatch, navigate]);
+
+  useEffect(() => {
+    if (location.pathname === "/login") return;
+
+    if (!document.cookie.includes("token")) {
+      navigate("/login");
+      return;
+    }
+
+    userData();
+  }, [location.pathname]);
 
   return (
     <>
