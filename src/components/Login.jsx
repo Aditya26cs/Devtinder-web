@@ -82,7 +82,7 @@ const Login = () => {
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Password"
+            placeholder="LastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           /> </>}

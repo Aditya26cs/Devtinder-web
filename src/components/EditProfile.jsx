@@ -1,52 +1,58 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "./Cards";
 import base_url from "../utils/constants";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+// 1. Import useSelector to get data from the store
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const EditProfile = ({ user }) => {
-
-  const [firstName, setFirstName] = useState(user?.firstName || "");
-  const [lastName, setLastName] = useState(user?.lastName || "");
-  const [password, setPassword] = useState(user?.password || "");
-  const [age, setAge] = useState(user?.age || "");
-  const [about, setAbout] = useState(user?.about || "");
-  const [gender, setGender] = useState(user?.gender || "");
-  const [image, setImage] = useState(user?.image || "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setAge] = useState("");
+  const [about, setAbout] = useState("");
+  const [gender, setGender] = useState("");
+  const [image, setImage] = useState("");
   const [error, setError] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
-  const [button , setButton] =  useState(false);
+  const [button, setButton] = useState(false);
 
   const dispatch = useDispatch();
 
-   useEffect(() => {
-    if (!user) return;
-    setFirstName(user.firstName || "");
-    setLastName(user.lastName || "");
-    setPassword(user.password || "");
-    setAge(user.age ?? "");
-    setAbout(user.about || "");
-    setGender(user.gender || "");
-    setImage(user.image || "");
+  // console.log("EditProfile user prop:", user);
+  useEffect(() => {
+    // 1. Check if we have user data.
+    // If the data is nested in 'user.data', grab that. Otherwise use 'user'.
+    const actualUser = user?.data || user;
+
+    if (!actualUser) return;
+
+    setFirstName(actualUser.firstName || "");
+    setLastName(actualUser.lastName || "");
+    setAge(actualUser.age || "");
+    setAbout(actualUser.about || "");
+    setGender(actualUser.gender || "");
+    setImage(actualUser.image || "");
+    setPassword("");
   }, [user]);
 
   const saveProfile = async () => {
-
     try {
-      // Build payload, removing empty strings and converting types
       const payload = {
         firstName: firstName || undefined,
         lastName: lastName || undefined,
-        password: password || undefined,
         age: age !== "" ? Number(age) : undefined,
         about: about || undefined,
         gender: gender || undefined,
         image: image || undefined,
-        // skills: skillsInput ? skillsInput.split(',').map(s => s.trim()).filter(Boolean) : undefined
       };
 
-      // Remove undefined fields
+      if (password && password.trim() !== "") {
+        payload.password = password;
+      }
+
+      // Clean undefined fields
       Object.keys(payload).forEach(
         (k) => payload[k] === undefined && delete payload[k]
       );
@@ -55,45 +61,41 @@ const EditProfile = ({ user }) => {
         withCredentials: true,
       });
 
-      // console.log(res.data);
-      dispatch(addUser(res?.data?.data));
+      // Update Redux with new data so the UI stays synced
+      dispatch(addUser(res?.data?.data || res?.data));
+
       setToastVisible(true);
-      setError(""); // Clear error on success
+      setError("");
+      setPassword("");
+
       setTimeout(() => {
         setToastVisible(false);
       }, 3000);
-    } 
-    
-    catch (err) {
-      // console.log(err);
+    } catch (err) {
       setError(err.response?.data || "Error updating profile");
     }
   };
 
+  // ... (Return JSX remains exactly the same)
   return (
-    <div
-      className="card bg-base-300 w-[700px] shadow-sm  absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 
-    flex flex-col md:flex-row  border-2 border-gray-800 h-[700px]"
-    >
-      <div className="card-body  ">
-
+    <div className="card bg-base-300 w-[700px] shadow-sm absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col md:flex-row border-2 border-gray-800 h-[700px]">
+      {/* LEFT SIDE: FORM INPUTS */}
+      <div className="card-body">
         <h2 className="card-title ml-26">Edit Profile</h2>
 
-        <fieldset className="fieldset ">
-          <legend className="fieldset-legend">FirstName</legend>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">First Name</legend>
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your first name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
 
-          <legend className="fieldset-legend">LastName</legend>
+          <legend className="fieldset-legend">Last Name</legend>
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your last name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
@@ -102,7 +104,6 @@ const EditProfile = ({ user }) => {
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your age"
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
@@ -111,7 +112,6 @@ const EditProfile = ({ user }) => {
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your about"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
           />
@@ -120,60 +120,61 @@ const EditProfile = ({ user }) => {
           <input
             type="text"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your gender"
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           />
 
           <legend className="fieldset-legend">Password</legend>
           <input
-            type="text"
+            type="password"
             className="input border-none outline-none rounded-xl"
-            placeholder="Enter your password"
+            placeholder="Leave blank to keep current password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <legend className="fieldset-legend">Profile Picture</legend>
+          <legend className="fieldset-legend">Profile Picture URL</legend>
           <input
             type="url"
             className="input border-none outline-none rounded-xl"
-            placeholder="profile picture URL"
             value={image}
             onChange={(e) => setImage(e.target.value)}
           />
         </fieldset>
 
-        <div className="card-actions justify-center mt-2 ">
+        <div className="card-actions justify-center mt-2">
           <button className="btn btn-primary rounded-xl" onClick={saveProfile}>
             Save
           </button>
         </div>
-
       </div>
 
+      {/* RIGHT SIDE: PREVIEW CARD */}
       <div className="mt-[6%] mr-3 h-3/4">
-
-        <Cards user={{ firstName, lastName, age, about, password, gender, image }} button={button} setButton={setButton} />
+        {/* Pass local state to Cards so it updates live as you type */}
+        <Cards
+          user={{ firstName, lastName, age, about, gender, image }}
+          button={button}
+          setButton={setButton}
+        />
 
         {error && (
-          <div className="text-red-500 text-center mt-2 border-2  border-gray-400 rounded-xl p-2">
+          <div className="text-red-500 text-center mt-2 border-2 border-gray-400 rounded-xl p-2">
             <p>{error}</p>
           </div>
         )}
 
-        {toastVisible && <div className="toast toast-top toast-center">
-           
-          <div className="alert alert-success">
-            <span> Profile saved successfully.</span>
+        {toastVisible && (
+          <div className="toast toast-top toast-center">
+            <div className="alert alert-success">
+              <span>Profile saved successfully.</span>
+            </div>
           </div>
-        </div>}
-
-
+        )}
       </div>
-
     </div>
   );
+  
 };
 
 export default EditProfile;
