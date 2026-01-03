@@ -18,7 +18,7 @@ const EditProfile = ({ user }) => {
   const [toastVisible, setToastVisible] = useState(false);
   const [button, setButton] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
 
   // console.log("EditProfile user prop:", user);
   useEffect(() => {
