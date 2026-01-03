@@ -4,6 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Devtinder-app/',
+  base: '/',  // ✅ CHANGED: Set to root for Vercel
   plugins: [react() , tailwindcss()],
 })
