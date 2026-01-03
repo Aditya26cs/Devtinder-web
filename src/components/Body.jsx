@@ -1,18 +1,24 @@
-import { useEffect } from "react";
+import { useEffect } from "react"; // Removed 'use' (it's likely not needed here)
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom"; // Added useLocation
 import axios from "axios";
 import base_url from "../utils/constants";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice"; // Added removeUser
 
 const Body = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Initialize location hook
   const dispatch = useDispatch();
 
-  const userData = async () => {
+  // Grab user from Redux store
+  const userData = useSelector((store) => store.user);
+
+  const fetchUser = async () => {
+    // Optimization: If Redux already has data, stop here.
+    if (userData) return;
+
     try {
       const res = await axios.get(base_url + "/profile/view", {
         withCredentials: true,
@@ -20,29 +26,23 @@ const Body = () => {
 
       dispatch(addUser(res.data));
     } catch (err) {
-      if (err.response?.status === 401) {
-        navigate("/login");
-        return;
-      }
-      console.error("Failed to fetch profile:", err);
+      console.error("Session expired or invalid:", err);
+      // If error (cookie invalid), clean up Redux and redirect
+      dispatch(removeUser()); 
+      navigate("/login");
     }
   };
 
-  // useEffect(() => {
-  //   if (location.pathname === "/login") return;
-  //   userData();
-  // }, [location.pathname, dispatch, navigate]);
-
   useEffect(() => {
+    // 1. If we are already on login page, don't fetch
     if (location.pathname === "/login") return;
 
-    if (!document.cookie.includes("token")) {
-      navigate("/login");
-      return;
-    }
-
-    userData();
-  }, [location.pathname]);
+    // 2. Trigger the fetch
+    fetchUser();
+    
+    // Note: We intentionally leave dependency array empty [] 
+    // so this runs only once on page reload.
+  }, []); 
 
   return (
     <>
