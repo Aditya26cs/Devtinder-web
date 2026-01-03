@@ -56,6 +56,12 @@ const Requests = () => {
       {Array.isArray(requestReceived) &&
         requestReceived.map((request) => {
           //  console.log(request);
+
+          // ✅ FIX 1: Check if 'fromUserId' exists before destructuring
+          if (!request.fromUserId) {
+            return null; // Skip this broken request so the app doesn't crash
+          }
+          
           const { _id, firstName, lastName, age, gender, about, image } = request.fromUserId;
 
           return (
